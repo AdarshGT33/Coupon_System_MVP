@@ -1,0 +1,127 @@
+basePath: /
+definitions:
+  helper.UserSentCoupon:
+    properties:
+      coupon_code:
+        type: string
+      medicine_ids:
+        items:
+          type: string
+        type: array
+      order_time:
+        type: string
+      order_value:
+        type: number
+      user_id:
+        type: string
+    type: object
+  models.Coupon:
+    type: object
+  models.Medicine:
+    properties:
+      category:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: string
+      medicineBrand:
+        type: string
+      medicineName:
+        type: string
+      price:
+        type: number
+      updatedAt:
+        type: string
+    type: object
+  models.UsageType:
+    enum:
+    - one_time
+    - multi_use
+    - time_based
+    type: string
+    x-enum-varnames:
+    - OneTime
+    - MultiUse
+    - TimeBased
+host: localhost:8080
+info:
+  contact:
+    email: tomaradarsh18@gmail.com
+    name: Adarsh Singh Tomar
+  description: This is the backend for validating and applying coupons.
+  termsOfService: http://yourdomain.com/terms/
+  title: Coupon System API
+  version: "1.0"
+paths:
+  /create-coupon:
+    post:
+      consumes:
+      - application/json
+      description: Allows creation of a new coupon with full configuration
+      parameters:
+      - description: Coupon payload
+        in: body
+        name: coupon
+        required: true
+        schema:
+          $ref: '#/definitions/models.Coupon'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new coupon
+      tags:
+      - Coupon
+  /validate-coupon:
+    post:
+      consumes:
+      - application/json
+      description: Validates a coupon for a specific order and checks all conditions
+      parameters:
+      - description: Coupon input
+        in: body
+        name: coupon
+        required: true
+        schema:
+          $ref: '#/definitions/helper.UserSentCoupon'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Validate a coupon
+      tags:
+      - Coupon
+swagger: "2.0"
